@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import {
   ArrowDownRight, ArrowRight, ArrowUpRight, BookOpen, Check, CheckCircle2,
-  ChevronRight, Circle, CircleHelp, Clock3, Compass, ExternalLink, Info, Lightbulb, Mail, Plus,
+  ChevronRight, Circle, CircleHelp, Clock3, Compass, CreditCard, ExternalLink, Info, Lightbulb, Mail, Plus,
   Search, Sparkles, Target, WandSparkles,
 } from 'lucide-react'
-import { creationTypes, forgeFaqs, forgeServices, inspirationIdeas, learningTracks, makerReflections, stages } from '../data'
+import { creationTypes, forgeFaqs, forgeServices, inspirationIdeas, learningTracks, makerReflections, stages, websitePricing } from '../data'
 import Journey from './Journey'
+import Pricing from './Pricing'
 
 const topicNames = ['Research', 'Design', 'Writing', 'Business', 'Marketing', 'Technology', 'Creativity', 'Communication']
 const showcaseCategories = ['All', 'Community', 'Education', 'Digital product']
@@ -59,6 +60,9 @@ export default function Workspace({ view, project, projects, onUpdate, onStageCh
   }
   if (view === 'result') {
     return <ResultWorkspace project={project} onStageChange={onStageChange} />
+  }
+  if (view === 'pricing') {
+    return <Pricing />
   }
   if (view === 'explore') {
     return (
@@ -118,9 +122,9 @@ export default function Workspace({ view, project, projects, onUpdate, onStageCh
 function InformationWorkspace({ view, onNewProject, onStageChange, onContactSubmit }) {
   if (view === 'services') {
     return <>
-      <PageHeading eyebrow="A connected creative process" title="Services for the whole journey." description="IdeaVision Forge brings the tools, learning, and structure to take a personal idea from first thought to finished work." action={<button className="button button-primary" type="button" onClick={() => onNewProject()}><Plus size={16} /> Start with your idea</button>} />
-      <div className="service-grid">{forgeServices.map((service) => <article className="service-card" key={service.number}><div className="service-card-top"><span>{service.number}</span><span>{service.stage}</span></div><h2>{service.title}</h2><p>{service.detail}</p><button type="button" className="text-action" onClick={() => onStageChange(stages[Number(service.number) - 1].id)}>Explore this stage <ArrowRight size={15} /></button></article>)}</div>
-      <div className="info-bottom-cta"><div><p className="eyebrow">ONE WORKSPACE, START TO FINISH</p><h2>Bring the idea you have been carrying.</h2></div><button type="button" className="button button-dark" onClick={() => onNewProject()}>Start a project <ArrowRight size={16} /></button></div>
+      <PageHeading eyebrow="A connected creative process" title="Services for the whole journey." description="IdeaVision Forge brings the tools, learning, and structure to take a personal idea from first thought to finished work." action={<button className="button button-primary" type="button" onClick={() => onStageChange('pricing')}><CreditCard size={16} /> View staged pricing</button>} />
+      <div className="service-grid">{forgeServices.map((service, index) => <article className="service-card" key={service.number}><div className="service-card-top"><span>{service.number}</span><span>{service.stage}</span></div><h2>{service.title}</h2><p>{service.detail}</p><span className="service-price">Website stage · ${websitePricing[index].amount}</span><button type="button" className="text-action" onClick={() => onStageChange(stages[Number(service.number) - 1].id)}>Explore this stage <ArrowRight size={15} /></button></article>)}</div>
+      <div className="info-bottom-cta"><div><p className="eyebrow">SUGGESTED FIVE-PAGE WEBSITE TOTAL</p><h2>${websitePricing.reduce((sum, stage) => sum + stage.amount, 0).toLocaleString('en-US')} across six agreed stages.</h2></div><button type="button" className="button button-dark" onClick={() => onStageChange('pricing')}>See costs & test payment <ArrowRight size={16} /></button></div>
     </>
   }
 
@@ -143,7 +147,7 @@ function InformationWorkspace({ view, onNewProject, onStageChange, onContactSubm
   if (view === 'contact') {
     return <>
       <PageHeading eyebrow="We would like to hear from you" title="Let's start a conversation." description="Share a question, tell us what you are making, or let us know how IdeaVision Forge could be more helpful." />
-      <div className="contact-layout"><section className="contact-copy"><span className="contact-symbol"><Mail size={21} /></span><p className="eyebrow">A NOTE TO THE FORGE</p><h2>Good ideas grow through conversation.</h2><p>Use the form to draft a question, share feedback, or talk about the creative process. We welcome beginners, curious makers, and people with a project already in motion.</p><div className="contact-promise"><CheckCircle2 size={17} /><span>Your message stays yours. This preview does not transmit or store contact details.</span></div></section><form className="contact-form" onSubmit={(event) => { event.preventDefault(); onContactSubmit() }}><p className="eyebrow">CONTACT FORM PREVIEW</p><label className="field-label">Your name<input name="name" autoComplete="name" required placeholder="How should we address you?" /></label><label className="field-label">Email address<input name="email" type="email" autoComplete="email" required placeholder="you@example.com" /></label><label className="field-label">What is this about?<select name="topic"><option>Project question</option><option>Website feedback</option><option>Partnership idea</option><option>Something else</option></select></label><label className="field-label">Your message<textarea name="message" rows="5" required placeholder="A little context helps us understand…" /></label><p className="contact-notice">This preview form does not send messages yet. Connect a monitored inbox or form service before publishing.</p><button className="button button-primary" type="submit">Preview contact request <ArrowRight size={16} /></button></form></div>
+      <div className="contact-layout"><section className="contact-copy"><span className="contact-symbol"><Mail size={21} /></span><p className="eyebrow">A NOTE TO THE FORGE</p><h2>Good ideas grow through conversation.</h2><p>Use the form to draft a question, share feedback, or talk about the creative process. We welcome beginners, curious makers, and people with a project already in motion.</p><div className="contact-number"><span>CALL OR WHATSAPP</span><a href="tel:08120996497">08120996497</a><a href="https://wa.me/2348120996497?text=Hi%20IdeaVision%20Forge%2C%20I%20have%20a%20question%20about%20your%20website%20services." target="_blank" rel="noreferrer">Message on WhatsApp <ArrowRight size={14} /></a></div><div className="contact-promise"><CheckCircle2 size={17} /><span>Your message stays yours. This preview does not transmit or store contact details.</span></div></section><form className="contact-form" onSubmit={(event) => { event.preventDefault(); onContactSubmit() }}><p className="eyebrow">CONTACT FORM PREVIEW</p><label className="field-label">Your name<input name="name" autoComplete="name" required placeholder="How should we address you?" /></label><label className="field-label">Email address<input name="email" type="email" autoComplete="email" required placeholder="you@example.com" /></label><label className="field-label">What is this about?<select name="topic"><option>Project question</option><option>Website feedback</option><option>Partnership idea</option><option>Something else</option></select></label><label className="field-label">Your message<textarea name="message" rows="5" required placeholder="A little context helps us understand…" /></label><p className="contact-notice">This preview form does not send messages yet. Connect a monitored inbox or form service before publishing.</p><button className="button button-primary" type="submit">Preview contact request <ArrowRight size={16} /></button></form></div>
     </>
   }
 

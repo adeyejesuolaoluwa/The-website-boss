@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import {
-  BookOpen, Check, ChevronDown, CircleHelp, Compass, Hammer, Info, Layers3,
+  BookOpen, Check, ChevronDown, CircleHelp, Compass, CreditCard, Hammer, Info, Layers3,
   LayoutDashboard, Lightbulb, Mail, Map, Menu, PanelsTopLeft, PenTool, Plus,
   Quote, Search, Sparkles, X,
 } from 'lucide-react'
@@ -8,7 +8,7 @@ import Workspace from './components/Workspace'
 import { creationTypes, navGroups, stages, starterProjects } from './data'
 import './App.css'
 
-const iconMap = { LayoutDashboard, Lightbulb, BookOpen, Map, PenTool, Hammer, Sparkles, Compass, PanelsTopLeft, Info, Layers3, Quote, CircleHelp, Mail }
+const iconMap = { LayoutDashboard, Lightbulb, BookOpen, Map, PenTool, Hammer, Sparkles, Compass, PanelsTopLeft, Info, Layers3, Quote, CircleHelp, Mail, CreditCard }
 
 function loadProjects() {
   try {

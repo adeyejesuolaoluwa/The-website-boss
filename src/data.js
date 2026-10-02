@@ -100,6 +100,7 @@ export const navGroups = [
       { id: 'result', label: 'Final result', icon: 'Sparkles' },
       { id: 'explore', label: 'Idea explorer', icon: 'Compass' },
       { id: 'showcase', label: 'Community showcase', icon: 'PanelsTopLeft' },
+      { id: 'pricing', label: 'Pricing & payments', icon: 'CreditCard' },
     ],
   },
   {
@@ -123,6 +124,15 @@ export const forgeServices = [
   { title: 'Project showcase', detail: 'Capture the journey, celebrate the finished work, and share the result.', stage: 'RESULT', number: '06' },
 ]
 
+export const websitePricing = [
+  { id: 'discovery', stage: '01', title: 'Discovery & scope', amount: 50, detail: 'Project brief, goals, audience, and agreed website scope.' },
+  { id: 'research', stage: '02', title: 'Research & sitemap', amount: 75, detail: 'Page structure, content checklist, and reference review.' },
+  { id: 'ux', stage: '03', title: 'UX & wireframes', amount: 100, detail: 'Responsive page layouts and a clear visitor journey.' },
+  { id: 'design', stage: '04', title: 'Visual design', amount: 225, detail: 'Distinctive visual direction and up to five page designs.' },
+  { id: 'build', stage: '05', title: 'Website build', amount: 500, detail: 'Responsive implementation for up to five standard pages.' },
+  { id: 'launch', stage: '06', title: 'Testing & handover', amount: 125, detail: 'Device checks, launch support, and a handover walkthrough.' },
+]
+
 export const forgeFaqs = [
   { question: 'What is IdeaVision Forge?', answer: 'IdeaVision Forge is a guided creative workspace that helps you move from a first thought to a practical project and a finished result.' },
   { question: 'What does I.L.P.C.B. stand for?', answer: 'Idea, Learn, Plan, Create, Build, and Final Result. Each stage connects to the next so your research, decisions, and progress stay with the project.' },
@@ -131,6 +141,7 @@ export const forgeFaqs = [
   { question: 'Does the roadmap have to be followed exactly?', answer: 'No. Milestones are a flexible guide. Update them as you learn, change direction, or discover a better next step.' },
   { question: 'Where is my project information saved?', answer: 'In this preview, projects are stored in your browser on this device. There is no account sync or cloud storage yet.' },
   { question: 'Can I share a finished project?', answer: 'The Final Result page includes a share action for copying a project summary. The showcase currently uses example projects.' },
+  { question: 'Can I pay for a website from this preview?', answer: 'No. Prices are indicative USD estimates and the payment screen is a local test simulation only. No payment is taken. A real quote, payment provider, and secure server integration are required before accepting money.' },
 ]
 
 export const makerReflections = [
