@@ -1,21 +1,23 @@
 import { useEffect, useState } from 'react'
 import {
-  BookOpen, Check, ChevronDown, CircleHelp, Compass, CreditCard, Hammer, Info, Layers3,
-  LayoutDashboard, Lightbulb, Mail, Map, Menu, PanelsTopLeft, PenTool, Plus,
-  Quote, Search, Sparkles, X,
+  BookOpen, Check, ChevronDown, CircleHelp, Compass, Hammer, Info, Layers3,
+  LayoutDashboard, Lightbulb, Mail, Map, Menu, MessageCircle, PanelsTopLeft, PenTool, Plus,
+  Search, Sparkles, X,
 } from 'lucide-react'
 import Workspace from './components/Workspace'
 import { creationTypes, navGroups, stages, starterProjects } from './data'
 import './App.css'
 
-const iconMap = { LayoutDashboard, Lightbulb, BookOpen, Map, PenTool, Hammer, Sparkles, Compass, PanelsTopLeft, Info, Layers3, Quote, CircleHelp, Mail, CreditCard }
+const iconMap = { LayoutDashboard, Lightbulb, BookOpen, Map, PenTool, Hammer, Sparkles, Compass, PanelsTopLeft, Info, Layers3, CircleHelp, Mail, MessageCircle }
+const retiredSampleIds = new Set(['pantry', 'fieldnotes', 'quietcorners'])
 
 function loadProjects() {
   try {
     const stored = localStorage.getItem('ideavision-projects')
-    return stored ? JSON.parse(stored) : starterProjects
+    const projects = stored ? JSON.parse(stored) : starterProjects
+    return Array.isArray(projects) ? projects.filter((item) => !retiredSampleIds.has(item.id)) : []
   } catch {
-    return starterProjects
+    return []
   }
 }
 
@@ -30,7 +32,11 @@ function App() {
   const project = projects.find((item) => item.id === selectedId) || projects[0]
 
   useEffect(() => { localStorage.setItem('ideavision-projects', JSON.stringify(projects)) }, [projects])
-  useEffect(() => { if (project) localStorage.setItem('ideavision-selected', project.id) }, [project])
+  useEffect(() => {
+    localStorage.removeItem('ideavision-test-transactions')
+    if (project) localStorage.setItem('ideavision-selected', project.id)
+    else localStorage.removeItem('ideavision-selected')
+  }, [project])
   useEffect(() => {
     const handleToast = (event) => {
       setToast(event.detail)
@@ -55,10 +61,16 @@ function App() {
   }
 
   const changeStage = (stageId) => {
+    const index = stages.findIndex((item) => item.id === stageId)
+    if (!project && index >= 0) {
+      setActiveView('idea')
+      setMobileNavOpen(false)
+      setModalOpen(true)
+      return
+    }
     selectView(stageId)
-    if (stageId !== 'result') {
-      const index = stages.findIndex((item) => item.id === stageId)
-      if (index >= 0) updateProject(project.id, { stage: stageId, stageIndex: index, progress: Math.max(project.progress, Math.min(95, index * 16)) })
+    if (project && index >= 0) {
+      updateProject(project.id, { stage: stageId, stageIndex: index })
     }
   }
 
@@ -71,12 +83,12 @@ function App() {
     const type = String(form.get('type'))
     if (!title || !description) return
     const created = {
-      id: `idea-${Date.now()}`, title, description, type, purpose: description,
-      audience: String(form.get('audience')).trim() || 'People who could use a thoughtful new solution',
-      problem: problem || 'A problem worth understanding more closely.',
-      solution: description, progress: 8, stage: 'idea', stageIndex: 0,
+      id: `idea-${Date.now()}`, title, description, type, purpose: '',
+      audience: String(form.get('audience')).trim(),
+      problem,
+      solution: '', progress: 0, stage: 'idea', stageIndex: 0,
       category: type.replace(' project', ''), nextTask: 'Write down who this idea could help', due: 'Whenever you are ready',
-      skills: ['Research', 'Creativity', 'Planning'], milestones: [
+      skills: [], milestones: [
         { title: 'Name the problem this could help solve', done: false },
         { title: 'Learn what people already need', done: false },
         { title: 'Sketch a first, useful version', done: false },
@@ -108,14 +120,14 @@ function App() {
             return <button type="button" key={item.id} className={`nav-link ${active ? 'nav-active' : ''}`} onClick={() => selectView(item.id)} aria-current={active ? 'page' : undefined}><Icon size={17} strokeWidth={1.8} /><span>{item.label}</span>{active && <span className="nav-indicator" />}</button>
           })}</div>)}
         </nav>
-        <div className="sidebar-bottom"><div className="sidebar-note"><span className="note-star">✳</span><p>Good things start<br />with a first thought.</p></div><div className="profile-row"><span className="profile-avatar">Y</span><span><strong>Your studio</strong><small>Maker account</small></span><button type="button" aria-label="Profile options" className="profile-menu"><Menu size={17} /></button></div></div>
+        <div className="sidebar-bottom"><div className="sidebar-note"><span className="note-star">✳</span><p>Good things start<br />with a first thought.</p></div><div className="profile-row"><span className="profile-avatar">IF</span><span><strong>Local workspace</strong><small>Saved in this browser</small></span></div></div>
       </aside>
 
       <main className="main-shell">
-        <header className="topbar"><div className="topbar-left"><button type="button" className="mobile-menu icon-button" aria-label="Toggle navigation" onClick={() => setMobileNavOpen(!mobileNavOpen)}><Menu size={20} /></button><span className="breadcrumb-root">Your studio</span><span className="breadcrumb-slash">/</span><span className="breadcrumb-current">{activeLabel}</span></div><div className="topbar-right"><label className="top-search"><Search size={16} /><span className="sr-only">Search your projects</span><input aria-label="Search projects" placeholder="Search projects" onKeyDown={(event) => { if (event.key === 'Enter') { const match = projects.find((item) => item.title.toLowerCase().includes(event.currentTarget.value.toLowerCase())); if (match) { setSelectedId(match.id); selectView('dashboard') } } }} /><kbd>↵</kbd></label><span className="topbar-divider" /><button className="profile-avatar top-avatar" type="button" aria-label="Your account">Y</button></div></header>
+        <header className="topbar"><div className="topbar-left"><button type="button" className="mobile-menu icon-button" aria-label="Toggle navigation" onClick={() => setMobileNavOpen(!mobileNavOpen)}><Menu size={20} /></button><span className="breadcrumb-root">Your studio</span><span className="breadcrumb-slash">/</span><span className="breadcrumb-current">{activeLabel}</span></div><div className="topbar-right"><label className="top-search"><Search size={16} /><span className="sr-only">Search your projects</span><input aria-label="Search projects" placeholder="Search projects" onKeyDown={(event) => { if (event.key === 'Enter') { const match = projects.find((item) => item.title.toLowerCase().includes(event.currentTarget.value.toLowerCase())); if (match) { setSelectedId(match.id); selectView('dashboard') } } }} /><kbd>↵</kbd></label></div></header>
         <div className="content-area">
-          <div className="content-toolbar"><span><span className="live-dot" /> YOUR CREATIVE STUDIO</span><label className="current-project-select"><span>WORKING ON</span><select value={project?.id || ''} onChange={(event) => setSelectedId(event.target.value)} aria-label="Select a project">{projects.map((item) => <option key={item.id} value={item.id}>{item.title}</option>)}</select><ChevronDown size={14} /></label></div>
-          <Workspace key={`${activeView}-${project?.id}`} view={activeView} project={project} projects={projects} onUpdate={updateProject} onStageChange={changeStage} onNewProject={openNewProject} onSelectProject={(id) => { setSelectedId(id); selectView('dashboard') }} onContactSubmit={() => setToast('Contact preview: connect an inbox to receive messages.')} />
+          <div className="content-toolbar"><span><span className="live-dot" /> YOUR CREATIVE STUDIO</span>{project ? <label className="current-project-select"><span>WORKING ON</span><select value={project.id} onChange={(event) => setSelectedId(event.target.value)} aria-label="Select a project">{projects.map((item) => <option key={item.id} value={item.id}>{item.title}</option>)}</select><ChevronDown size={14} /></label> : <button type="button" className="button button-outline" onClick={() => openNewProject()}><Plus size={14} /> Start your first idea</button>}</div>
+          <Workspace key={`${activeView}-${project?.id}`} view={activeView} project={project} projects={projects} onUpdate={updateProject} onStageChange={changeStage} onNewProject={openNewProject} onSelectProject={(id) => { setSelectedId(id); selectView('dashboard') }} />
           <footer className="studio-footer"><span>IDEAVISION FORGE <i>·</i> I.L.P.C.B.</span><span>Turn any idea into something real.</span></footer>
         </div>
       </main>

@@ -7,80 +7,7 @@ export const stages = [
   { id: 'result', number: '06', name: 'Final result', short: 'Share what you made' },
 ]
 
-export const starterProjects = [
-  {
-    id: 'pantry',
-    title: 'The Neighborhood Pantry',
-    type: 'Community project',
-    description: 'A small, welcoming food-sharing network that makes it easier for neighbors to give and receive what they need.',
-    purpose: 'Reduce food waste and make everyday essentials easier to access, one block at a time.',
-    audience: 'Neighbors, local growers, and community organizers',
-    problem: 'Good food goes unused while neighbors nearby may need a little extra support.',
-    solution: 'A simple map of trusted neighborhood pantries, donation shelves, and volunteer pickup times.',
-    progress: 62,
-    stage: 'build',
-    stageIndex: 4,
-    category: 'Community',
-    nextTask: 'Test the pickup flow with three neighbors',
-    due: 'Today',
-    skills: ['Research', 'Community building', 'Design'],
-    milestones: [
-      { title: 'Listen to the neighborhood', done: true },
-      { title: 'Sketch the pantry directory', done: true },
-      { title: 'Gather local partners', done: true },
-      { title: 'Test the first pickup flow', done: false },
-    ],
-    createdAt: '2026-09-12',
-  },
-  {
-    id: 'fieldnotes',
-    title: 'Field Notes for Curious Kids',
-    type: 'Educational project',
-    description: 'A pocket-sized collection of playful outdoor prompts that turns an ordinary walk into a tiny nature expedition.',
-    purpose: 'Help young explorers notice more of the natural world close to home.',
-    audience: 'Curious kids ages 7–11 and the grown-ups walking alongside them',
-    problem: 'Outdoor learning can feel like a lesson instead of an invitation to look closer.',
-    solution: 'A beautifully illustrated field journal with quick, sensory-led activities.',
-    progress: 34,
-    stage: 'create',
-    stageIndex: 3,
-    category: 'Education',
-    nextTask: 'Write five “look a little closer” prompts',
-    due: 'Tomorrow',
-    skills: ['Writing', 'Illustration', 'Learning design'],
-    milestones: [
-      { title: 'Choose a curious point of view', done: true },
-      { title: 'Explore a few local trails', done: true },
-      { title: 'Write the first set of prompts', done: false },
-      { title: 'Share a draft with young explorers', done: false },
-    ],
-    createdAt: '2026-09-20',
-  },
-  {
-    id: 'quietcorners',
-    title: 'Quiet Corners',
-    type: 'Digital product',
-    description: 'A map of calm, comfortable places to take a break during a busy day in the city.',
-    purpose: 'Make room for a small reset between the busy parts of the day.',
-    audience: 'City dwellers looking for a softer place to pause',
-    problem: 'It is surprisingly hard to find a quiet seat when you need one.',
-    solution: 'A community-sourced guide to welcoming, low-noise spaces and their best visiting hours.',
-    progress: 100,
-    stage: 'result',
-    stageIndex: 5,
-    category: 'Digital product',
-    nextTask: 'Celebrate your first finished project',
-    due: 'Complete',
-    skills: ['Research', 'Mapping', 'Product design'],
-    milestones: [
-      { title: 'Talk with people who need a pause', done: true },
-      { title: 'Map welcoming quiet spots', done: true },
-      { title: 'Build the first neighborhood guide', done: true },
-      { title: 'Share Quiet Corners with the city', done: true },
-    ],
-    createdAt: '2026-08-24',
-  },
-]
+export const starterProjects = []
 
 export const navGroups = [
   {
@@ -100,7 +27,7 @@ export const navGroups = [
       { id: 'result', label: 'Final result', icon: 'Sparkles' },
       { id: 'explore', label: 'Idea explorer', icon: 'Compass' },
       { id: 'showcase', label: 'Community showcase', icon: 'PanelsTopLeft' },
-      { id: 'pricing', label: 'Pricing & payments', icon: 'CreditCard' },
+      { id: 'pricing', label: 'Request a quote', icon: 'MessageCircle' },
     ],
   },
   {
@@ -124,13 +51,13 @@ export const forgeServices = [
   { title: 'Project showcase', detail: 'Capture the journey, celebrate the finished work, and share the result.', stage: 'RESULT', number: '06' },
 ]
 
-export const websitePricing = [
-  { id: 'discovery', stage: '01', title: 'Discovery & scope', amount: 50, detail: 'Project brief, goals, audience, and agreed website scope.' },
-  { id: 'research', stage: '02', title: 'Research & sitemap', amount: 75, detail: 'Page structure, content checklist, and reference review.' },
-  { id: 'ux', stage: '03', title: 'UX & wireframes', amount: 100, detail: 'Responsive page layouts and a clear visitor journey.' },
-  { id: 'design', stage: '04', title: 'Visual design', amount: 225, detail: 'Distinctive visual direction and up to five page designs.' },
-  { id: 'build', stage: '05', title: 'Website build', amount: 500, detail: 'Responsive implementation for up to five standard pages.' },
-  { id: 'launch', stage: '06', title: 'Testing & handover', amount: 125, detail: 'Device checks, launch support, and a handover walkthrough.' },
+export const websiteStages = [
+  { id: 'discovery', stage: '01', title: 'Discovery & scope', detail: 'Agree project goals, audience, page count, and delivery scope.' },
+  { id: 'research', stage: '02', title: 'Research & sitemap', detail: 'Map the pages, content needs, and visitor journey.' },
+  { id: 'ux', stage: '03', title: 'UX & wireframes', detail: 'Plan responsive layouts before visual design begins.' },
+  { id: 'design', stage: '04', title: 'Visual design', detail: 'Approve the visual direction and page designs.' },
+  { id: 'build', stage: '05', title: 'Website build', detail: 'Develop the agreed website pages and interactions.' },
+  { id: 'launch', stage: '06', title: 'Testing & handover', detail: 'Review the finished scope, test devices, and arrange handover.' },
 ]
 
 export const forgeFaqs = [
@@ -140,14 +67,7 @@ export const forgeFaqs = [
   { question: 'Do I need experience to get started?', answer: 'No. Start with a rough idea. The learning area suggests useful beginner-friendly topics, and you can build skills as the project develops.' },
   { question: 'Does the roadmap have to be followed exactly?', answer: 'No. Milestones are a flexible guide. Update them as you learn, change direction, or discover a better next step.' },
   { question: 'Where is my project information saved?', answer: 'In this preview, projects are stored in your browser on this device. There is no account sync or cloud storage yet.' },
-  { question: 'Can I share a finished project?', answer: 'The Final Result page includes a share action for copying a project summary. The showcase currently uses example projects.' },
-  { question: 'Can I pay for a website from this preview?', answer: 'No. Prices are indicative USD estimates and the payment screen is a local test simulation only. No payment is taken. A real quote, payment provider, and secure server integration are required before accepting money.' },
-]
-
-export const makerReflections = [
-  { quote: 'I had plenty of enthusiasm and no obvious place to begin. Breaking the idea into one small next step made starting feel possible.', byline: 'Example maker reflection', context: 'Finding a first step' },
-  { quote: 'The roadmap gave me direction without making the project feel fixed. I could change the plan as I learned more.', byline: 'Example maker reflection', context: 'Learning while building' },
-  { quote: 'Seeing the first thought next to the finished project made the progress feel real. I could finally say: I made it.', byline: 'Example maker reflection', context: 'Sharing the result' },
+  { question: 'How do I get a website quote?', answer: 'Contact IdeaVision Forge with your requirements, page count, and preferred features. The website does not publish a confirmed fee schedule or accept online payments.' },
 ]
 
 export const inspirationIdeas = [
@@ -160,9 +80,9 @@ export const inspirationIdeas = [
 ]
 
 export const learningTracks = [
-  { category: 'Research', title: 'Ask better questions', detail: 'Short interviews that turn assumptions into useful insight.', time: '12 min', tone: 'mint' },
-  { category: 'Design', title: 'Sketch the simplest version', detail: 'Explore an idea on paper before committing to a build.', time: '18 min', tone: 'blue' },
-  { category: 'Community', title: 'Find your first collaborators', detail: 'Build a small circle of people who care about the same problem.', time: '9 min', tone: 'peach' },
+  { category: 'Research', title: 'Ask better questions', detail: 'Write down three questions to ask someone affected by the problem.', tone: 'mint' },
+  { category: 'Design', title: 'Sketch the simplest version', detail: 'Draw the smallest useful version of the idea before you build it.', tone: 'blue' },
+  { category: 'Communication', title: 'Explain the idea clearly', detail: 'Describe who the project helps and what it changes in two sentences.', tone: 'peach' },
 ]
 
 export const creationTypes = ['Website', 'App', 'Small business', 'Book', 'Book or story', 'Game', 'Product', 'Digital product', 'Brand', 'Invention', 'Presentation', 'Educational project', 'Community', 'Community project', 'Creative project', 'Something else']

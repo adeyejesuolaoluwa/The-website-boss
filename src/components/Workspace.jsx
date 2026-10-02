@@ -1,22 +1,16 @@
 import { useState } from 'react'
 import {
   ArrowDownRight, ArrowRight, ArrowUpRight, BookOpen, Check, CheckCircle2,
-  ChevronRight, Circle, CircleHelp, Clock3, Compass, CreditCard, ExternalLink, Info, Lightbulb, Mail, Plus,
-  Search, Sparkles, Target, WandSparkles,
+  ChevronRight, Circle, CircleHelp, Clock3, Compass, ExternalLink, Lightbulb, Mail, Plus,
+  Search, Sparkles, Target, WandSparkles, MessageCircle,
 } from 'lucide-react'
-import { creationTypes, forgeFaqs, forgeServices, inspirationIdeas, learningTracks, makerReflections, stages, websitePricing } from '../data'
+import { creationTypes, forgeFaqs, forgeServices, inspirationIdeas, learningTracks, stages } from '../data'
 import Journey from './Journey'
 import Pricing from './Pricing'
 
 const topicNames = ['Research', 'Design', 'Writing', 'Business', 'Marketing', 'Technology', 'Creativity', 'Communication']
 const showcaseCategories = ['All', 'Community', 'Education', 'Digital product']
 const typeColors = { 'Community project': 'mint', 'Educational project': 'blue', 'Digital product': 'peach' }
-const showcaseImages = {
-  quietcorners: 'https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=1200&q=80',
-  fieldnotes: 'https://images.unsplash.com/photo-1472396961693-142e6e269027?auto=format&fit=crop&w=1200&q=80',
-  pantry: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=1200&q=80',
-}
-
 function PageHeading({ eyebrow, title, description, action }) {
   return (
     <div className="page-heading">
@@ -30,35 +24,33 @@ function PageHeading({ eyebrow, title, description, action }) {
   )
 }
 
-export default function Workspace({ view, project, projects, onUpdate, onStageChange, onNewProject, onSelectProject, onContactSubmit }) {
+export default function Workspace({ view, project, projects, onUpdate, onStageChange, onNewProject, onSelectProject }) {
   const [filter, setFilter] = useState('All')
   const [query, setQuery] = useState('')
 
-  if (!project) return null
-
   const updateProject = (updates) => onUpdate(project.id, updates)
-  const currentStage = stages[project.stageIndex] || stages[0]
-  const nextStage = stages[Math.min(project.stageIndex + 1, stages.length - 1)]
+  const currentStage = project ? stages[project.stageIndex] || stages[0] : stages[0]
+  const nextStage = project ? stages[Math.min(project.stageIndex + 1, stages.length - 1)] : stages[1]
   const filteredIdeas = inspirationIdeas.filter((idea) =>
     (filter === 'All' || idea.type === filter) && `${idea.title} ${idea.concept} ${idea.type}`.toLowerCase().includes(query.toLowerCase()),
   )
 
-  if (view === 'idea') {
+  if (project && view === 'idea') {
     return <IdeaWorkspace project={project} onUpdate={updateProject} onStageChange={onStageChange} />
   }
-  if (view === 'learn') {
+  if (project && view === 'learn') {
     return <LearnWorkspace project={project} onUpdate={updateProject} onStageChange={onStageChange} />
   }
-  if (view === 'plan') {
+  if (project && view === 'plan') {
     return <PlanWorkspace project={project} onUpdate={updateProject} onStageChange={onStageChange} />
   }
-  if (view === 'create') {
+  if (project && view === 'create') {
     return <CreateWorkspace project={project} onUpdate={updateProject} onStageChange={onStageChange} />
   }
-  if (view === 'build') {
+  if (project && view === 'build') {
     return <BuildWorkspace project={project} onUpdate={updateProject} onStageChange={onStageChange} />
   }
-  if (view === 'result') {
+  if (project && view === 'result') {
     return <ResultWorkspace project={project} onStageChange={onStageChange} />
   }
   if (view === 'pricing') {
@@ -67,7 +59,7 @@ export default function Workspace({ view, project, projects, onUpdate, onStageCh
   if (view === 'explore') {
     return (
       <>
-        <PageHeading eyebrow="A little spark goes a long way" title="Idea explorer" description="Browse thoughtful starting points, then make one your own." />
+        <PageHeading eyebrow="Idea prompts" title="Idea explorer" description="These are starting-point prompts, not submitted or completed projects. Adapt one or start with your own idea." />
         <div className="explorer-controls">
           <label className="search-field"><Search size={17} /><span className="sr-only">Search ideas</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search ideas, themes, or formats" /></label>
           <div className="filter-tabs" aria-label="Filter ideas">
@@ -95,7 +87,7 @@ export default function Workspace({ view, project, projects, onUpdate, onStageCh
     const results = completed.filter((item) => (filter === 'All' || item.category === filter) && `${item.title} ${item.description}`.toLowerCase().includes(query.toLowerCase()))
     return (
       <>
-        <PageHeading eyebrow="Made by people like you" title="Community showcase" description="Every finished project started as a thought someone decided to follow." />
+        <PageHeading eyebrow="Projects from this workspace" title="Completed projects" description="Only projects you have completed in this workspace appear here. No public community submissions are connected." />
         <div className="explorer-controls">
           <label className="search-field"><Search size={17} /><span className="sr-only">Search projects</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search finished projects" /></label>
           <div className="filter-tabs" aria-label="Filter showcase">
@@ -104,36 +96,48 @@ export default function Workspace({ view, project, projects, onUpdate, onStageCh
         </div>
         <div className="showcase-grid">
           {results.map((item, index) => <article className="showcase-card" key={item.id}>
-            <div className={`showcase-art showcase-art-${index % 3}`}><img className="showcase-image" src={showcaseImages[item.id]} alt="" onError={(event) => { event.currentTarget.style.display = 'none' }} /><span className="showcase-stamp">FINISHED<br />WITH CARE</span><Sparkles size={23} /></div>
-            <div className="showcase-copy"><div className="showcase-meta"><span>{item.category}</span><span>By a fellow maker</span></div><h2>{item.title}</h2><p>{item.description}</p><div className="showcase-tags">{item.skills.slice(0, 3).map((skill) => <span key={skill}>{skill}</span>)}</div><button className="text-action" type="button" onClick={() => onSelectProject(item.id)}><span>See the transformation</span><ArrowRight size={16} /></button></div>
+            <div className={`showcase-art showcase-art-${index % 3}`}><span className="showcase-stamp">COMPLETED<br />PROJECT</span><Sparkles size={23} /></div>
+            <div className="showcase-copy"><div className="showcase-meta"><span>{item.category}</span><span>Your studio</span></div><h2>{item.title}</h2><p>{item.description}</p><div className="showcase-tags">{item.skills.map((skill) => <span key={skill}>{skill}</span>)}</div><button className="text-action" type="button" onClick={() => onSelectProject(item.id)}><span>See your result</span><ArrowRight size={16} /></button></div>
           </article>)}
-          {results.length === 0 && <p className="empty-filter">No completed projects match yet.</p>}
+          {results.length === 0 && <p className="empty-filter">No completed projects in this workspace match the selected filter.</p>}
         </div>
       </>
     )
   }
   if (['about', 'services', 'testimonials', 'faq', 'contact'].includes(view)) {
-    return <InformationWorkspace view={view} onNewProject={onNewProject} onStageChange={onStageChange} onContactSubmit={onContactSubmit} />
+    return <InformationWorkspace view={view} onNewProject={onNewProject} onStageChange={onStageChange} />
   }
+
+  if (!project) return <EmptyWorkspace onNewProject={onNewProject} />
 
   return <Dashboard project={project} projects={projects} onUpdate={updateProject} onStageChange={onStageChange} onNewProject={onNewProject} onSelectProject={onSelectProject} currentStage={currentStage} nextStage={nextStage} />
 }
 
-function InformationWorkspace({ view, onNewProject, onStageChange, onContactSubmit }) {
+function EmptyWorkspace({ onNewProject }) {
+  return (
+    <section className="empty-workspace">
+      <span className="empty-workspace-mark"><Lightbulb size={23} /></span>
+      <p className="eyebrow">YOUR WORKSPACE IS EMPTY</p>
+      <h1>Your first idea starts here.</h1>
+      <p>There are no projects in this workspace yet. Start with an idea you enter and build your own project record.</p>
+      <button type="button" className="button button-primary" onClick={() => onNewProject()}><Plus size={16} /> Start your first idea</button>
+    </section>
+  )
+}
+
+function InformationWorkspace({ view, onNewProject, onStageChange }) {
   if (view === 'services') {
     return <>
-      <PageHeading eyebrow="A connected creative process" title="Services for the whole journey." description="IdeaVision Forge brings the tools, learning, and structure to take a personal idea from first thought to finished work." action={<button className="button button-primary" type="button" onClick={() => onStageChange('pricing')}><CreditCard size={16} /> View staged pricing</button>} />
-      <div className="service-grid">{forgeServices.map((service, index) => <article className="service-card" key={service.number}><div className="service-card-top"><span>{service.number}</span><span>{service.stage}</span></div><h2>{service.title}</h2><p>{service.detail}</p><span className="service-price">Website stage · ${websitePricing[index].amount}</span><button type="button" className="text-action" onClick={() => onStageChange(stages[Number(service.number) - 1].id)}>Explore this stage <ArrowRight size={15} /></button></article>)}</div>
-      <div className="info-bottom-cta"><div><p className="eyebrow">SUGGESTED FIVE-PAGE WEBSITE TOTAL</p><h2>${websitePricing.reduce((sum, stage) => sum + stage.amount, 0).toLocaleString('en-US')} across six agreed stages.</h2></div><button type="button" className="button button-dark" onClick={() => onStageChange('pricing')}>See costs & test payment <ArrowRight size={16} /></button></div>
+      <PageHeading eyebrow="A connected creative process" title="Services for the whole journey." description="Use one workspace to shape an idea, learn, plan, create, build, and record your own final result." action={<button className="button button-primary" type="button" onClick={() => onStageChange('pricing')}><MessageCircle size={16} /> Request a quote</button>} />
+      <div className="service-grid">{forgeServices.map((service) => <article className="service-card" key={service.number}><div className="service-card-top"><span>{service.number}</span><span>{service.stage}</span></div><h2>{service.title}</h2><p>{service.detail}</p><button type="button" className="text-action" onClick={() => onStageChange(stages[Number(service.number) - 1].id)}>Explore this stage <ArrowRight size={15} /></button></article>)}</div>
+      <div className="info-bottom-cta"><div><p className="eyebrow">ASK ABOUT YOUR PROJECT</p><h2>Scope and price are agreed directly before work begins.</h2></div><button type="button" className="button button-dark" onClick={() => onStageChange('pricing')}>Contact for a quote <ArrowRight size={16} /></button></div>
     </>
   }
 
   if (view === 'testimonials') {
     return <>
-      <PageHeading eyebrow="The work speaks for itself" title="Small steps. Real momentum." description="A few example reflections on what it can feel like to move an idea forward." />
-      <div className="reflection-note"><Info size={16} /><span>These are illustrative reflections, not attributed customer reviews.</span></div>
-      <div className="reflection-grid">{makerReflections.map((reflection, index) => <article className="reflection-card" key={reflection.context}><span className={`reflection-mark reflection-mark-${index}`} aria-hidden="true">“</span><p className="reflection-quote">{reflection.quote}</p><div className="reflection-byline"><span className="reflection-avatar">{String(index + 1).padStart(2, '0')}</span><span><strong>{reflection.byline}</strong><small>{reflection.context}</small></span></div></article>)}</div>
-      <div className="info-bottom-cta"><div><p className="eyebrow">YOUR TURN</p><h2>Make the first step your own.</h2></div><button type="button" className="button button-dark" onClick={() => onNewProject()}>Start with an idea <ArrowRight size={16} /></button></div>
+      <PageHeading eyebrow="Customer feedback" title="No testimonials published." description="No customer testimonials have been provided for this website. Only verified feedback supplied with permission should be added here." />
+      <a className="button button-outline" href="https://wa.me/2348120996497" target="_blank" rel="noreferrer"><MessageCircle size={16} /> Contact IdeaVision Forge</a>
     </>
   }
 
@@ -146,8 +150,8 @@ function InformationWorkspace({ view, onNewProject, onStageChange, onContactSubm
 
   if (view === 'contact') {
     return <>
-      <PageHeading eyebrow="We would like to hear from you" title="Let's start a conversation." description="Share a question, tell us what you are making, or let us know how IdeaVision Forge could be more helpful." />
-      <div className="contact-layout"><section className="contact-copy"><span className="contact-symbol"><Mail size={21} /></span><p className="eyebrow">A NOTE TO THE FORGE</p><h2>Good ideas grow through conversation.</h2><p>Use the form to draft a question, share feedback, or talk about the creative process. We welcome beginners, curious makers, and people with a project already in motion.</p><div className="contact-number"><span>CALL OR WHATSAPP</span><a href="tel:08120996497">08120996497</a><a href="https://wa.me/2348120996497?text=Hi%20IdeaVision%20Forge%2C%20I%20have%20a%20question%20about%20your%20website%20services." target="_blank" rel="noreferrer">Message on WhatsApp <ArrowRight size={14} /></a></div><div className="contact-promise"><CheckCircle2 size={17} /><span>Your message stays yours. This preview does not transmit or store contact details.</span></div></section><form className="contact-form" onSubmit={(event) => { event.preventDefault(); onContactSubmit() }}><p className="eyebrow">CONTACT FORM PREVIEW</p><label className="field-label">Your name<input name="name" autoComplete="name" required placeholder="How should we address you?" /></label><label className="field-label">Email address<input name="email" type="email" autoComplete="email" required placeholder="you@example.com" /></label><label className="field-label">What is this about?<select name="topic"><option>Project question</option><option>Website feedback</option><option>Partnership idea</option><option>Something else</option></select></label><label className="field-label">Your message<textarea name="message" rows="5" required placeholder="A little context helps us understand…" /></label><p className="contact-notice">This preview form does not send messages yet. Connect a monitored inbox or form service before publishing.</p><button className="button button-primary" type="submit">Preview contact request <ArrowRight size={16} /></button></form></div>
+      <PageHeading eyebrow="Direct contact" title="Contact IdeaVision Forge." description="Call or start a WhatsApp conversation using the contact information provided by the owner." />
+      <div className="contact-layout"><section className="contact-copy"><span className="contact-symbol"><Mail size={21} /></span><p className="eyebrow">CONTACT</p><h2>Discuss the actual project scope.</h2><p>Use the direct links to ask a question, discuss a project, or request a quote. No website form collects your personal information.</p><div className="contact-number"><span>CALL OR WHATSAPP</span><a href="tel:08120996497">08120996497</a><a href="https://wa.me/2348120996497" target="_blank" rel="noreferrer">Open WhatsApp <ArrowRight size={14} /></a></div></section><div className="contact-form"><p className="eyebrow">BEFORE YOU GET IN TOUCH</p><h2>For a clear quote, include:</h2><ul className="contact-brief-list"><li>What you want to build</li><li>Who the website is for</li><li>How many pages you need</li><li>Any required features or deadline</li></ul></div></div>
     </>
   }
 
@@ -162,7 +166,7 @@ function InformationWorkspace({ view, onNewProject, onStageChange, onContactSubm
 function Dashboard({ project, projects, onUpdate, onStageChange, onNewProject, onSelectProject, currentStage, nextStage }) {
   const totalDone = projects.filter((item) => item.progress === 100).length
   const milestonesDone = project.milestones.filter((item) => item.done).length
-  const transformations = projects.filter((item) => ['quietcorners', 'fieldnotes'].includes(item.id))
+  const transformations = projects.filter((item) => item.progress === 100)
   return (
     <>
       <PageHeading eyebrow="Your ideas, in motion" title="Turn Any Idea Into Something Real." description="Move from a first thought through six connected stages: Idea, Learn, Plan, Create, Build, and Final Result." action={<button className="button button-primary" type="button" onClick={() => onNewProject()}><Plus size={17} /> Start with your idea</button>} />
@@ -213,7 +217,7 @@ function Dashboard({ project, projects, onUpdate, onStageChange, onNewProject, o
       </div>
       <section className="home-extras">
         <div className="section-topline"><div><p className="eyebrow">FROM A FIRST THOUGHT TO A FINISHED THING</p><h2>Small ideas can travel a long way.</h2></div><button className="text-action" type="button" onClick={() => onStageChange('showcase')}>See the community showcase <ArrowRight size={16} /></button></div>
-        <div className="transformation-grid">{transformations.map((item, index) => <button className="transformation-card" type="button" key={item.id} onClick={() => { onSelectProject(item.id); onStageChange('result') }}><span className={`transformation-index transform-${index}`}>0{index + 1}</span><span className="transformation-story"><span>THE FIRST THOUGHT</span><strong>{index === 0 ? 'Could the city use a softer place to pause?' : 'What if a walk could spark a little wonder?'}</strong></span><ArrowRight className="transform-arrow" size={17} /><span className="transformation-story transformation-outcome"><span>WHAT IT BECAME</span><strong>{item.title}</strong><small>{item.type}</small></span></button>)}</div>
+        {transformations.length > 0 ? <div className="transformation-grid">{transformations.map((item, index) => <button className="transformation-card" type="button" key={item.id} onClick={() => { onSelectProject(item.id); onStageChange('result') }}><span className={`transformation-index transform-${index}`}>0{index + 1}</span><span className="transformation-story"><span>THE FIRST THOUGHT</span><strong>{item.problem || item.description}</strong></span><ArrowRight className="transform-arrow" size={17} /><span className="transformation-story transformation-outcome"><span>WHAT IT BECAME</span><strong>{item.title}</strong><small>{item.type}</small></span></button>)}</div> : <p className="empty-filter">Completed projects you create will appear here. Nothing has been added yet.</p>}
         <div className="type-band"><div><p className="eyebrow">A STUDIO FOR ALL KINDS OF IDEAS</p><h2>What would you like to make?</h2></div><div className="type-ribbon">{creationTypes.map((type) => <button key={type} type="button" onClick={() => onNewProject('', type)}>{type}<Plus size={12} /></button>)}</div></div>
       </section>
       <p className="dashboard-footnote">{nextStage && `Next up in your journey: ${nextStage.name}.`} A good idea grows one thoughtful step at a time.</p>
@@ -253,11 +257,11 @@ function LearnWorkspace({ project, onUpdate, onStageChange }) {
   const toggle = (title) => onUpdate({ lessonProgress: completed.includes(title) ? completed.filter((entry) => entry !== title) : [...completed, title] })
   return <>
     <StageHeader eyebrow="02 / GET CURIOUS" title="Learn just enough to begin." description={`A learning path connected to ${project.title}, built around useful skills instead of busywork.`} project={project} onStageChange={onStageChange} />
-    <section className="learning-overview"><div><p className="eyebrow">YOUR LEARNING TRAIL</p><h2>Good questions are a skill, too.</h2><p>Start with what you already know. Choose one topic that helps with the next project step.</p></div><div className="learning-progress"><strong>{completed.length}<span> / 6</span></strong><small>topics explored</small><div className="progress-track"><span style={{ width: `${Math.min(completed.length / 6 * 100, 100)}%` }} /></div></div></section>
+    <section className="learning-overview"><div><p className="eyebrow">SELF-TRACKED PROMPTS</p><h2>Good questions are a skill, too.</h2><p>These are short exercises, not courses or linked tutorials. Work through them and mark each one when you have done it.</p></div><div className="learning-progress"><strong>{completed.length}<span> / {learningTracks.length}</span></strong><small>prompts completed</small><div className="progress-track"><span style={{ width: `${Math.min(completed.length / learningTracks.length * 100, 100)}%` }} /></div></div></section>
     <div className="topic-strip">{topicNames.map((topic) => <span className={project.skills?.includes(topic) ? 'topic-active' : ''} key={topic}>{topic}</span>)}</div>
     <div className="lesson-grid">{learningTracks.map((lesson, index) => {
       const done = completed.includes(lesson.title)
-      return <article className="lesson-card" key={lesson.title}><div className={`lesson-mark ${lesson.tone}`}><span>0{index + 1}</span><BookOpen size={19} /></div><div className="lesson-meta"><span>{lesson.category}</span><span><Clock3 size={13} /> {lesson.time}</span></div><h2>{lesson.title}</h2><p>{lesson.detail}</p><button type="button" className={`lesson-button ${done ? 'lesson-done' : ''}`} onClick={() => toggle(lesson.title)}>{done ? <><CheckCircle2 size={17} /> Completed</> : <>Mark as explored <ArrowRight size={16} /></>}</button></article>
+      return <article className="lesson-card" key={lesson.title}><div className={`lesson-mark ${lesson.tone}`}><span>0{index + 1}</span><BookOpen size={19} /></div><div className="lesson-meta"><span>{lesson.category} prompt</span></div><h2>{lesson.title}</h2><p>{lesson.detail}</p><button type="button" className={`lesson-button ${done ? 'lesson-done' : ''}`} onClick={() => toggle(lesson.title)}>{done ? <><CheckCircle2 size={17} /> Marked complete</> : <>Mark prompt complete <ArrowRight size={16} /></>}</button></article>
     })}</div>
     <div className="stage-nudge"><div><span className="nudge-icon"><WandSparkles size={18} /></span><div><strong>A little knowledge is enough to start.</strong><p>Keep your curiosity; you can learn the rest as you go.</p></div></div><button className="button button-dark" type="button" onClick={() => onStageChange('plan')}>Make a practical plan <ArrowRight size={16} /></button></div>
   </>
