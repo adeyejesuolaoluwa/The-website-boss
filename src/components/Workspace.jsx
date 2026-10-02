@@ -108,20 +108,25 @@ export default function Workspace({ view, project, projects, onUpdate, onStageCh
     return <InformationWorkspace view={view} onNewProject={onNewProject} onStageChange={onStageChange} />
   }
 
-  if (!project) return <EmptyWorkspace onNewProject={onNewProject} />
+  if (!project) return <EmptyWorkspace onNewProject={onNewProject} onStageChange={onStageChange} />
 
   return <Dashboard project={project} projects={projects} onUpdate={updateProject} onStageChange={onStageChange} onNewProject={onNewProject} onSelectProject={onSelectProject} currentStage={currentStage} nextStage={nextStage} />
 }
 
-function EmptyWorkspace({ onNewProject }) {
+function EmptyWorkspace({ onNewProject, onStageChange }) {
   return (
-    <section className="empty-workspace">
-      <span className="empty-workspace-mark"><Lightbulb size={23} /></span>
-      <p className="eyebrow">YOUR WORKSPACE IS EMPTY</p>
-      <h1>Your first idea starts here.</h1>
-      <p>There are no projects in this workspace yet. Start with an idea you enter and build your own project record.</p>
-      <button type="button" className="button button-primary" onClick={() => onNewProject()}><Plus size={16} /> Start your first idea</button>
-    </section>
+    <>
+      <PageHeading eyebrow="Your ideas, in motion" title="Make room for the next big thing." description="Start with one idea and move through the I.L.P.C.B. stages at your own pace." action={<button className="button button-primary" type="button" onClick={() => onNewProject()}><Plus size={17} /> Start with your idea</button>} />
+      <section className="welcome-strip" aria-label="IdeaVision Forge process"><div className="welcome-mark" aria-hidden="true"><span>i</span><span>·</span><span>f</span></div><p><strong>I.L.P.C.B.</strong> Idea <i>→</i> Learn <i>→</i> Plan <i>→</i> Create <i>→</i> Build <i>→</i> Final Result</p><button type="button" className="welcome-link" onClick={() => onStageChange('services')}>How it works <ArrowUpRight size={15} /></button></section>
+      <section className="journey-panel"><div className="section-topline"><div><p className="eyebrow">THE JOURNEY</p><h2>Your progress, at a glance</h2></div><span className="project-status">NO PROJECT STARTED</span></div><Journey stageIndex={0} onSelect={(stage) => onStageChange(stage.id)} /><div className="journey-footer"><span>Your workspace is ready when you are.</span><button className="text-action" type="button" onClick={() => onNewProject()}>Start your first idea <ArrowRight size={16} /></button></div></section>
+      <div className="dashboard-grid">
+        <section className="panel next-panel"><div className="section-topline"><div><p className="eyebrow">A GOOD FIRST STEP</p><h2>Start with what matters</h2></div><span className="step-icon"><Lightbulb size={17} /></span></div><div className="empty-panel-copy"><p>There are no projects in this workspace yet. Add an idea to see its next steps here.</p><button type="button" className="button button-dark full-button" onClick={() => onNewProject()}>Create your first idea <ArrowRight size={16} /></button></div></section>
+        <section className="panel milestones-panel"><div className="section-topline"><div><p className="eyebrow">SMALL STEPS ADD UP</p><h2>Project milestones</h2></div><span className="milestone-count">0<span> started</span></span></div><p className="empty-panel-copy">Milestones will appear here after you create a project.</p><button type="button" className="text-action" onClick={() => onNewProject()}>Start planning <ArrowRight size={16} /></button></section>
+        <section className="panel projects-panel"><div className="section-topline"><div><p className="eyebrow">YOUR STUDIO</p><h2>Your projects</h2></div><button type="button" className="icon-button" aria-label="Create project" onClick={() => onNewProject()}><Plus size={17} /></button></div><p className="empty-panel-copy">No projects yet. Projects you create will be listed here.</p><button type="button" className="text-action" onClick={() => onNewProject()}>Add a project <ArrowRight size={16} /></button></section>
+        <section className="learn-callout"><div className="learn-orbit" aria-hidden="true"><BookOpen size={22} /></div><div><p className="eyebrow">LEARN AS YOU GO</p><h2>Build skills around your idea.</h2><p>Start a project to see relevant learning prompts and track what you explore.</p></div><button type="button" className="button button-outline" onClick={() => onNewProject()}>Start with an idea <ArrowRight size={16} /></button></section>
+      </div>
+      <section className="home-extras"><div className="section-topline"><div><p className="eyebrow">A STUDIO FOR DIFFERENT IDEAS</p><h2>What would you like to make?</h2></div><button className="text-action" type="button" onClick={() => onStageChange('explore')}>Browse idea prompts <ArrowRight size={16} /></button></div><div className="type-band"><div><p className="eyebrow">START WITH A FORMAT</p><h2>Choose a project type</h2></div><div className="type-ribbon">{creationTypes.map((type) => <button key={type} type="button" onClick={() => onNewProject('', type)}>{type}<Plus size={12} /></button>)}</div></div></section>
+    </>
   )
 }
 

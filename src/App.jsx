@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react'
 import {
   BookOpen, Check, ChevronDown, CircleHelp, Compass, Hammer, Info, Layers3,
   LayoutDashboard, Lightbulb, Mail, Map, Menu, MessageCircle, PanelsTopLeft, PenTool, Plus,
-  Search, Sparkles, X,
+  Quote, Search, Sparkles, X,
 } from 'lucide-react'
 import Workspace from './components/Workspace'
 import { creationTypes, navGroups, stages, starterProjects } from './data'
 import './App.css'
 
-const iconMap = { LayoutDashboard, Lightbulb, BookOpen, Map, PenTool, Hammer, Sparkles, Compass, PanelsTopLeft, Info, Layers3, CircleHelp, Mail, MessageCircle }
+const iconMap = { LayoutDashboard, Lightbulb, BookOpen, Map, PenTool, Hammer, Sparkles, Compass, PanelsTopLeft, Info, Layers3, CircleHelp, Mail, MessageCircle, Quote }
 const retiredSampleIds = new Set(['pantry', 'fieldnotes', 'quietcorners'])
 
 function loadProjects() {
