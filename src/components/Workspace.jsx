@@ -2,7 +2,7 @@ import { useState } from 'react'
 import {
   ArrowDownRight, ArrowRight, ArrowUpRight, BookOpen, Check, CheckCircle2,
   ChevronRight, Circle, CircleHelp, Clock3, Compass, ExternalLink, Lightbulb, Mail, Plus,
-  Search, Sparkles, Target, WandSparkles, MessageCircle,
+  Search, Sparkles, Target, WandSparkles, MessageCircle, ShieldCheck, Scale,
 } from 'lucide-react'
 import { creationTypes, forgeFaqs, forgeServices, inspirationIdeas, learningTracks, stages } from '../data'
 import Journey from './Journey'
@@ -104,7 +104,7 @@ export default function Workspace({ view, project, projects, onUpdate, onStageCh
       </>
     )
   }
-  if (['about', 'services', 'testimonials', 'faq', 'contact'].includes(view)) {
+  if (['about', 'services', 'testimonials', 'faq', 'contact', 'privacy', 'terms'].includes(view)) {
     return <InformationWorkspace view={view} onNewProject={onNewProject} onStageChange={onStageChange} />
   }
 
@@ -131,6 +131,20 @@ function EmptyWorkspace({ onNewProject, onStageChange }) {
 }
 
 function InformationWorkspace({ view, onNewProject, onStageChange }) {
+  if (view === 'privacy') {
+    return <>
+      <PageHeading eyebrow="Your data and choices" title="Privacy information." description="A plain-language summary of how this website currently handles information. Review and update it before launch if your setup changes." />
+      <div className="policy-layout"><section className="policy-section"><ShieldCheck size={20} /><h2>Project storage</h2><p>Without Supabase credentials, projects are stored in this browser on this device. They do not sync to another device. Clearing browser storage can remove them.</p><p>When the owner connects Supabase and account sign-in is enabled, signed-in projects are stored in the configured Supabase project with row-level security. The actual provider region, retention rules, and account deletion process must be confirmed by the owner.</p></section><section className="policy-section"><MessageCircle size={20} /><h2>Contact links</h2><p>Call and WhatsApp links open your phone or the third-party WhatsApp service. This website does not receive the message contents through a site form.</p></section><section className="policy-section"><Scale size={20} /><h2>Payments and analytics</h2><p>This website does not take online payments or ask for card details. No analytics service is configured in this project.</p></section></div>
+    </>
+  }
+
+  if (view === 'terms') {
+    return <>
+      <PageHeading eyebrow="Using the workspace" title="Terms of use." description="A practical summary for this project workspace. Have these terms reviewed for your business and jurisdiction before treating them as a legal agreement." />
+      <div className="policy-layout"><section className="policy-section"><h2>Project workspace</h2><p>You are responsible for the ideas, files, and other material you add. Keep a separate copy of important work, especially when using browser-only storage.</p></section><section className="policy-section"><h2>Services and quotes</h2><p>Service stages describe a possible process, not a guaranteed deliverable. Project scope, dates, revisions, ownership, and fees must be agreed in writing before paid work begins. No fixed price is published here.</p></section><section className="policy-section"><h2>Payments</h2><p>No payment is collected through this website. Do not send bank or card information through the site. Any future payment must use a configured provider and a separately agreed quote.</p></section><section className="policy-section"><h2>Contact</h2><p>Questions can be directed through the phone and WhatsApp links on the Contact page. Those services operate under their own terms.</p></section></div>
+    </>
+  }
+
   if (view === 'services') {
     return <>
       <PageHeading eyebrow="A connected creative process" title="Services for the whole journey." description="Use one workspace to shape an idea, learn, plan, create, build, and record your own final result." action={<button className="button button-primary" type="button" onClick={() => onStageChange('pricing')}><MessageCircle size={16} /> Request a quote</button>} />

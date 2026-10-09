@@ -38,6 +38,8 @@ export const navGroups = [
       { id: 'testimonials', label: 'Testimonials', icon: 'Quote' },
       { id: 'faq', label: 'FAQ', icon: 'CircleHelp' },
       { id: 'contact', label: 'Contact', icon: 'Mail' },
+      { id: 'privacy', label: 'Privacy', icon: 'ShieldCheck' },
+      { id: 'terms', label: 'Terms', icon: 'Scale' },
     ],
   },
 ]
@@ -66,7 +68,7 @@ export const forgeFaqs = [
   { question: 'What kinds of projects can I work on?', answer: 'Websites, apps, businesses, books, games, products, brands, inventions, presentations, educational work, community projects, and more.' },
   { question: 'Do I need experience to get started?', answer: 'No. Start with a rough idea. The learning area suggests useful beginner-friendly topics, and you can build skills as the project develops.' },
   { question: 'Does the roadmap have to be followed exactly?', answer: 'No. Milestones are a flexible guide. Update them as you learn, change direction, or discover a better next step.' },
-  { question: 'Where is my project information saved?', answer: 'In this preview, projects are stored in your browser on this device. There is no account sync or cloud storage yet.' },
+  { question: 'Where is my project information saved?', answer: 'Without account setup, projects stay in this browser. When Supabase is configured, signed-in projects are stored in that account. Browser-only projects are not automatically imported.' },
   { question: 'How do I get a website quote?', answer: 'Contact IdeaVision Forge with your requirements, page count, and preferred features. The website does not publish a confirmed fee schedule or accept online payments.' },
 ]
 

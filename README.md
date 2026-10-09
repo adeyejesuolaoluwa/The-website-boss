@@ -1,16 +1,32 @@
-# React + Vite
+# IdeaVision Forge
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+IdeaVision Forge is a responsive project workspace organized around Idea, Learn, Plan, Create, Build, and Final Result. The workspace starts empty and does not publish fictional projects, reviews, fixed prices, or payment activity.
 
-Currently, two official plugins are available:
+## Run locally
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+```powershell
+npm ci
+npm run dev
+```
 
-## React Compiler
+Check changes with `npm run lint` and `npm run build`.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Enable accounts and cloud storage
 
-## Expanding the Oxlint configuration
+1. Create a Supabase project and enable email/password authentication.
+2. Run `supabase/schema.sql` in the Supabase SQL Editor.
+3. Copy `.env.example` to `.env.local` and set `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` from the Supabase project settings.
+4. Restart the dev server. Sign-in is enabled when both variables are set.
+5. For GitHub Pages, add the same values as repository Actions variables with those names. Never expose a service-role key in the browser.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+Projects made in browser-only mode are not automatically imported into an account. Keep a separate copy before signing in.
+
+## Publish with GitHub Pages
+
+The workflow in `.github/workflows/deploy.yml` builds and publishes `main`. A repository owner must enable **Settings → Pages → Build and deployment → GitHub Actions** once. The workflow cannot change this owner-controlled repository setting.
+
+After a successful workflow run, the site URL is `https://adeyejesuolaoluwa.github.io/The-website-boss/`.
+
+## Business setup
+
+Contact is through the owner's phone and WhatsApp links. No website contact form or online payment is connected. Agree the scope and price directly before paid work. The Privacy and Terms pages are drafts and should be reviewed for the business and its jurisdictions before launch.

@@ -1,22 +1,15 @@
 create table if not exists public.projects (
   id uuid primary key default gen_random_uuid(),
   user_id uuid not null default auth.uid() references auth.users(id) on delete cascade,
+  client_id text not null,
   title text not null,
   project_type text not null default 'Creative project',
-  description text not null default '',
-  problem text not null default '',
-  purpose text not null default '',
-  audience text not null default '',
-  solution text not null default '',
   stage text not null default 'idea' check (stage in ('idea', 'learn', 'plan', 'create', 'build', 'result')),
-  stage_index smallint not null default 0 check (stage_index between 0 and 5),
   progress smallint not null default 0 check (progress between 0 and 100),
-  idea_context jsonb not null default '{}'::jsonb,
-  lesson_progress jsonb not null default '[]'::jsonb,
-  build_checklist jsonb not null default '[]'::jsonb,
-  creation_note text not null default '',
+  project_data jsonb not null default '{}'::jsonb,
   created_at timestamptz not null default now(),
-  updated_at timestamptz not null default now()
+  updated_at timestamptz not null default now(),
+  unique (user_id, client_id)
 );
 
 alter table public.projects enable row level security;
